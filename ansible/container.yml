@@ -8,10 +8,10 @@ services:
       - ROOT_PASSWORD=password
     entrypoint: ['/usr/bin/entrypoint.sh']
     working_dir: /
-    #privileged: true
+    privileged: true
     #network_mode: host
-    #cap_add:
-    #  - NET_ADMIN
+    cap_add:
+      - NET_ADMIN
     expose:
       - 25151
       - 69/udp
