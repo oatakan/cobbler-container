@@ -63,4 +63,17 @@
 - name: template rhel-7-kickstart
   copy:
     src: var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
-    dest: /var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+    dest: /var/lib/cobbler/kickstarts/centos7-customized.ks.j2
+
+- name: add_public_key_for_root snippnet
+  template: src=var/lib/cobbler/snippets/add_public_key_for_root.j2
+            dest=/var/lib/cobbler/snippets/add_public_key_for_root
+  when: cobbler_root_public_keys is defined
+
+- name: post_install_network_config_ignore_interface snippnet
+  template: src=var/lib/cobbler/snippets/post_install_network_config_ignore_interface.j2
+            dest=/var/lib/cobbler/snippets/post_install_network_config_ignore_interface
+
+- name: template centos7-customized
+  template: src=var/lib/cobbler/kickstarts/centos7-customized.j2
+            dest=/var/lib/cobbler/kickstarts/centos7-customized

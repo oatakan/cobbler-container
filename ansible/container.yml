@@ -4,7 +4,7 @@ services:
     image: centos:7
     environment:
       - APACHE_SSL=1
-      - SERVER_IP=192.168.1.126
+      - SERVER_IP=192.168.1.153
       - ROOT_PASSWORD=password
     entrypoint: ['/usr/bin/entrypoint.sh']
     working_dir: /
