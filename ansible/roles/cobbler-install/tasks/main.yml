@@ -53,17 +53,6 @@
 - name: copy modules.conf
   copy: src=etc/cobbler/modules.conf dest=/etc/cobbler/modules.conf mode=644
 
-#- name: copy cobbler_web.conf
-#  copy: src=etc/httpd/conf.d/cobbler_web.conf dest=/etc/httpd/conf.d/cobbler_web.conf mode=644
-
-#    - name: get hash of user
-#      shell: echo -n "{{ item.user_name }}:Cobbler:" && echo -n "{{ item.user_name }}:Cobbler:{{ item.password }}" | md5sum | awk '{print $1}'
-#      with_items: "{{ cobbler_web_user_pwd | default([]) }}"
-#      register: cobbler_web_user_pwd_hash
-#
-#    - name: template /etc/cobbler/users.digest
-#      template: src=etc/cobbler/users.digest.j2 dest=/etc/cobbler/users.digest mode=644
-
 - name: generate crypted password
   shell: openssl passwd -1 {{ cobbler_default_password }}
   register: cobbler_default_password_crypted
@@ -73,9 +62,6 @@
 
 - name: template dnsmasq.template.j2
   template: src=etc/cobbler/dnsmasq.template.j2 dest=/etc/cobbler/dnsmasq.template
-
-#- name: change 'disable' to 'no' in /etc/xinetd.d/tftp
-#  lineinfile: dest=/etc/xinetd.d/tftp regexp="disable" line="disable = no"
 
 #----------------
 # begin add snippets and kickstarts
@@ -93,24 +79,3 @@
   copy:
     src: var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
     dest: /var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
-
-#- name: start cobbler services
-#  shell: /usr/sbin/apachectl; /usr/bin/cobblerd
-#
-#- name: cobbler get-loaders
-#  shell: cobbler get-loaders
-
-#---------------
-# import distros
-#---------------
-
-#- name: import distro to cobbler
-#  shell: cobbler import --name={{ cobbler_distro.distro_name }}
-#         --arch={{ cobbler_distro.arch }}
-#         --path=/mnt/
-#         --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
-#  when: cobbler_distro is defined
-#  ignore_errors: true
-#
-#- name: cobbler sync
-#  shell: cobbler sync
