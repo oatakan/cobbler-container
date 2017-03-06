@@ -8,7 +8,7 @@ services:
       - ROOT_PASSWORD=password
     entrypoint: ['/usr/bin/entrypoint.sh']
     working_dir: /
-    privileged: true
+    #privileged: true
     network_mode: host
     expose:
       - 25151
