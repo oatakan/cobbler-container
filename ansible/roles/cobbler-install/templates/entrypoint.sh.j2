@@ -6,7 +6,7 @@ sed -i "s/^server: 127.0.0.1/server: $SERVER_IP/g" /etc/cobbler/settings
 #sed -i 's/pxe_just_once: 0/pxe_just_once: 1/g' /etc/cobbler/settings
 #sed -i 's/manage_dhcp: 0/manage_dhcp: 1/g' /etc/cobbler/settings
 #sed -i "s#^default_password.*#default_password_crypted: \"$PASSWORD\"#g" /etc/cobbler/settings
-#sed -i "s/^#ServerName www.example.com:80/ServerName localhost:80/" /etc/httpd/conf/httpd.conf
+sed -i "s/^#ServerName www.example.com:80/ServerName localhost:80/" /etc/httpd/conf/httpd.conf
 
 rm -rf /run/httpd/*
 /usr/sbin/apachectl
