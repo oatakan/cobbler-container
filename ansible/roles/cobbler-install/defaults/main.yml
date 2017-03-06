@@ -10,6 +10,8 @@ cobbler_pxe_just_once: 1
 cobbler_server: 127.0.0.1
 cobbler_next_server: 127.0.0.1
 
+cobbler_default_time_zone: "UTC"
+
 cobbler_version: 2.8
 cobbler_repo_url: http://download.opensuse.org/repositories/home:/libertas-ict:/cobbler28/CentOS_7/home:libertas-ict:cobbler28.repo
 
