@@ -24,7 +24,7 @@ cobbler import --name="RHEL-7.3-x86_64" \
          --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
 
 cobbler profile edit --name=RHEL-7.3-x86_64 \
-         --kopts="kernel_options : ksdevice lang=  inst.repo=http://$SERVER_IP/cblr/ks_mirror/RHEL-73-x86_64 ip=dhcp text kssendmac"
+         --kopts="kernel_options : ksdevice lang=  inst.repo=http://$SERVER_IP/cblr/ks_mirror/RHEL-7.3-x86_64 ip=dhcp text kssendmac"
 
 ## add post script to restart dnsmasq since we don't use systemd inside the container
 echo -e '#!/bin/bash\npkill dnsmasq; /usr/sbin/dnsmasq' >  /var/lib/cobbler/triggers/sync/post/run.sh
