@@ -75,5 +75,5 @@
             dest=/var/lib/cobbler/snippets/post_install_network_config_ignore_interface
 
 - name: template centos7-customized
-  template: src=var/lib/cobbler/kickstarts/centos7-customized.j2
-            dest=/var/lib/cobbler/kickstarts/centos7-customized
+  template: src=var/lib/cobbler/kickstarts/centos7-customized.ks.j2
+            dest=/var/lib/cobbler/kickstarts/centos7-customized.ks
