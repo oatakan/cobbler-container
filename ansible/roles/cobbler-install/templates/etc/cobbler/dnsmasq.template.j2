@@ -1,0 +1,27 @@
+# Cobbler generated configuration file for dnsmasq
+# $date 
+#
+
+# resolve.conf .. ?
+#no-poll
+#enable-dbus
+read-ethers
+addn-hosts = /var/lib/cobbler/cobbler_hosts
+user=root
+interface=en0
+
+dhcp-range={{ cobbler_network }},proxy
+
+# Only respond to clients that are known (i.e present in /etc/ethers)
+dhcp-ignore=#known
+
+# Set this (and domain: see below) if you want to have a domain
+# automatically added to simple names in a hosts-file.
+expand-hosts
+domain={{ cobbler_domain }},{{ cobbler_network }}
+
+# Loads <tftp-root>/pxelinux.0 from dnsmasq TFTP server.
+pxe-service=x86PC, "Boot PXELinux (=Cobbler controlled)", pxelinux ,$next_server
+
+$insert_cobbler_system_definitions
+
