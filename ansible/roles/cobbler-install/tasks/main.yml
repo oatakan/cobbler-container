@@ -63,7 +63,7 @@
 - name: template rhel-7-kickstart
   copy:
     src: var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
-    dest: /var/lib/cobbler/kickstarts/centos7-customized.ks.j2
+    dest: /var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
 
 - name: add_public_key_for_root snippnet
   template: src=var/lib/cobbler/snippets/add_public_key_for_root.j2
