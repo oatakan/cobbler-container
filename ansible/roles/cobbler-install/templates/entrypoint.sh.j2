@@ -23,6 +23,9 @@ cobbler import --name="RHEL-7.3-x86_64" \
          --path=/mnt \
          --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
 
+cobbler profile edit --name=RHEL-7.3-x86_64 \
+         --kopts="kernel_options : ksdevice lang=  inst.repo=http://$SERVER_IP/cblr/ks_mirror/RHEL-73-x86_64 ip=dhcp text kssendmac"
+
 cobbler sync
 
 pkill cobblerd
