@@ -12,7 +12,7 @@ sed -i "s/^#ServerName www.example.com:80/ServerName localhost:80/" /etc/httpd/c
 INT=`ip addr show|egrep '^ *inet 192.168.1.126'|grep brd|awk -- '{ print $7; }'|sed -e 's:/[0-9]*$::'`
 
 if [ -n "${INT}" ]; then
-  sed -i 's/#interface=eth0/interface=$INT/g' /etc/cobbler/dnsmasq.template
+  sed -i "s/#interface=eth0/interface=$INT/g" /etc/cobbler/dnsmasq.template
 fi
 
 
