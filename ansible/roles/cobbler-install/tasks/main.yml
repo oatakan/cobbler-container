@@ -4,8 +4,8 @@
 
 - name: download cobbler repo
   get_url:
-    url: http://download.opensuse.org/repositories/home:/libertas-ict:/cobbler28/CentOS_7/home:libertas-ict:cobbler28.repo
-    dest: /etc/yum.repos.d/cobbler28.repo
+    url: "{{ cobbler_repo_url }}"
+    dest: /etc/yum.repos.d/cobbler.repo
 
 - name: uncomment baseurl in epel
   lineinfile: dest=/etc/yum.repos.d/epel.repo regexp="#baseurl=http\:\/\/download\.fedoraproject\.org\/pub\/epel\/7\/\$basearch$"

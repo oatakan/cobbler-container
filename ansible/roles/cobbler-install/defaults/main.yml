@@ -10,6 +10,9 @@ cobbler_pxe_just_once: 1
 cobbler_server: 127.0.0.1
 cobbler_next_server: 127.0.0.1
 
+cobbler_version: 3.0
+cobbler_repo_url: http://download.opensuse.org/repositories/home:/libertas-ict:/cobbler30/CentOS_CentOS-7/home:libertas-ict:cobbler30.repo
+
 cobbler_distro:
   distro_name: RHEL-7.3
   iso_file: rhel-server-7.3-x86_64-dvd.iso
