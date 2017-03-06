@@ -39,6 +39,7 @@ rm -rf /run/httpd/*
 
 {% if APACHE_SSL == 1 %}
 if [ ! -r /etc/httpd/ssl/cert.crt ]; then
+  mkdir -p /etc/httpd/ssl
   cd  /etc/httpd/ssl
   openssl req -subj '/CN={{APACHE_HOSTNAME}}/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 3650 -sha256  -nodes -x509 -keyout cert.key -out cert.crt
 fi
