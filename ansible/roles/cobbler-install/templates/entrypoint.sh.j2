@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #PASSWORD=`openssl passwd -1 -salt hLGoLIZR $ROOT_PASSWORD`
-sed -i "s/^next_server: 127.0.0.1/next_server: $SERVER_IP/g" /etc/cobbler/settings
+sed -i "s/^next_server: 127.0.0.1/next_server: $NEXT_SERVER/g" /etc/cobbler/settings
 sed -i "s/^server: 127.0.0.1/server: $SERVER_IP/g" /etc/cobbler/settings
 #sed -i 's/pxe_just_once: 0/pxe_just_once: 1/g' /etc/cobbler/settings
 #sed -i 's/manage_dhcp: 0/manage_dhcp: 1/g' /etc/cobbler/settings
