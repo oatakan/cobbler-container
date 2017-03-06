@@ -7,9 +7,6 @@
     url: http://download.opensuse.org/repositories/home:/libertas-ict:/cobbler28/CentOS_7/home:libertas-ict:cobbler28.repo
     dest: /etc/yum.repos.d/cobbler28.repo
 
-- debug:
-    msg: "url = {{ hostvars[inventory_hostname] }}"
-
 - name: uncomment baseurl in epel
   lineinfile: dest=/etc/yum.repos.d/epel.repo regexp="#baseurl=http\:\/\/download\.fedoraproject\.org\/pub\/epel\/7\/\$basearch$"
               line="baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch"
@@ -62,18 +59,6 @@
 
 - name: template dnsmasq.template.j2
   template: src=etc/cobbler/dnsmasq.template.j2 dest=/etc/cobbler/dnsmasq.template
-
-#----------------
-# begin add snippets and kickstarts
-#----------------
-#    - name: add_public_key_for_root snippnet
-#      template: src=var/lib/cobbler/snippets/add_public_key_for_root.j2
-#                dest=/var/lib/cobbler/snippets/add_public_key_for_root
-#      when: cobbler_root_public_keys is defined
-#
-#    - name: post_install_network_config_ignore_interface snippnet
-#      template: src=var/lib/cobbler/snippets/post_install_network_config_ignore_interface.j2
-#                dest=/var/lib/cobbler/snippets/post_install_network_config_ignore_interface
 
 - name: template rhel-7-kickstart
   copy:
