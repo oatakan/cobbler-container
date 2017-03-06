@@ -1,0 +1,31 @@
+version: '2'
+services:
+  cobbler:
+    image: cobbler-container-cobbler
+    environment:
+      - APACHE_SSL=1
+      - SERVER_IP=192.168.1.153
+      - ROOT_PASSWORD=password
+    entrypoint: ['/usr/bin/entrypoint.sh']
+    working_dir: /
+    privileged: true
+    network_mode: host
+    expose:
+      - 25151
+      - 69/udp
+      - 80
+      - 443
+    ports:
+      - "8090:443"
+      - "8080:80"
+      - "25151:25151"
+      - "69:69/udp"
+    volumes:
+      - cobbler-data:/var/lib/cobbler:rw
+      - cobbler-www:/var/www/cobbler:rw
+      - /Users/oatakan/Documents/iso/iso_mounted:/mnt:ro
+    command: bash -c "/usr/sbin/apachectl; /usr/bin/cobblerd; /usr/sbin/dnsmasq; /usr/sbin/in.tftpd -L -l -4 -a 0.0.0.0:69 -s /var/lib/tftpboot"
+#   command: bash -c "/usr/bin/cobblerd -F; /usr/sbin/httpd -DFOREGROUND; /usr/sbin/in.tftpd -L -l -4 -a 0.0.0.0:69 -s /var/lib/tftpboot"
+volumes:
+  cobbler-data:
+  cobbler-www:

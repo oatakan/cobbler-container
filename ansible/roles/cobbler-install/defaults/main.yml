@@ -1,0 +1,16 @@
+---
+APACHE_HOSTNAME: 'localhost'
+APACHE_SSL: 1
+cobbler_network: 192.168.1.0
+cobbler_domain: home.ad
+cobbler_default_password: c0bbler
+cobbler_epel_too_slow: no
+cobbler_manage_dhcp: 1
+cobbler_pxe_just_once: 1
+cobbler_server: 127.0.0.1
+cobbler_next_server: 127.0.0.1
+
+cobbler_distro:
+  distro_name: RHEL-7.3
+  iso_file: rhel-server-7.3-x86_64-dvd.iso
+  arch: x86_64

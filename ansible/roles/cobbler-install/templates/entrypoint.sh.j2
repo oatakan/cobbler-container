@@ -1,0 +1,39 @@
+#!/bin/sh
+
+#PASSWORD=`openssl passwd -1 -salt hLGoLIZR $ROOT_PASSWORD`
+#sed -i "s/^next_server: 127.0.0.1/next_server: $SERVER_IP/g" /etc/cobbler/settings
+#sed -i 's/pxe_just_once: 0/pxe_just_once: 1/g' /etc/cobbler/settings
+#sed -i 's/manage_dhcp: 0/manage_dhcp: 1/g' /etc/cobbler/settings
+#sed -i "s#^default_password.*#default_password_crypted: \"$PASSWORD\"#g" /etc/cobbler/settings
+#sed -i "s/^#ServerName www.example.com:80/ServerName localhost:80/" /etc/httpd/conf/httpd.conf
+
+rm -rf /run/httpd/*
+/usr/sbin/apachectl
+/usr/bin/cobblerd
+
+cobbler sync
+cobbler get-loaders
+
+cobbler signature update
+
+## import distro
+cobbler import --name="RHEL-7.3-x86_64" \
+         --arch="x86_64" \
+         --path=/mnt/rhel-server-7.3-x86_64-dvd \
+         --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+
+cobbler sync
+
+pkill cobblerd
+pkill httpd
+rm -rf /run/httpd/*
+
+#sed -i "s/^server: 127.0.0.1/server: $SERVER_IP/g" /etc/cobbler/settings
+
+{% if APACHE_SSL == 1 %}
+if [ ! -r /etc/httpd/ssl/cert.crt ]; then
+  cd  /etc/httpd/ssl
+  openssl req -subj '/CN={{APACHE_HOSTNAME}}/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 3650 -sha256  -nodes -x509 -keyout cert.key -out cert.crt
+fi
+{% endif %}
+exec "$@"

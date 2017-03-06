@@ -1,0 +1,116 @@
+---
+- name: install epel repo
+  yum: name=epel-release state=present
+
+- name: download cobbler repo
+  get_url:
+    url: http://download.opensuse.org/repositories/home:/libertas-ict:/cobbler28/CentOS_7/home:libertas-ict:cobbler28.repo
+    dest: /etc/yum.repos.d/cobbler28.repo
+
+- debug:
+    msg: "url = {{ hostvars[inventory_hostname] }}"
+
+- name: uncomment baseurl in epel
+  lineinfile: dest=/etc/yum.repos.d/epel.repo regexp="#baseurl=http\:\/\/download\.fedoraproject\.org\/pub\/epel\/7\/\$basearch$"
+              line="baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch"
+  when: cobbler_epel_too_slow is defined and cobbler_epel_too_slow
+
+- name: comment mirrorlist in epel
+  lineinfile: dest=/etc/yum.repos.d/epel.repo regexp="mirrorlist=https\:\/\/mirrors\.fedoraproject\.org\/metalink\?repo=epel-7\&arch=\$basearch$"
+              line="#mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch"
+  when: cobbler_epel_too_slow is defined and cobbler_epel_too_slow
+
+- name: install related packages
+  yum: name={{ item }} state=present
+  with_items:
+    - cobbler
+    - cobbler-web
+    - dnsmasq
+    - tftp-server
+    - pykickstart
+    - openssl
+
+- name: Install dumb init
+  get_url:
+    url: https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64
+    dest: /usr/bin/dumb-init
+    owner: root
+    group: root
+    mode: 0775
+
+
+- name: Add entrypoint script
+  template:
+   src: entrypoint.sh.j2
+   dest: /usr/bin/entrypoint.sh
+   owner: root
+   group: root
+   mode: 0775
+
+- name: Cleanup
+  shell: yum clean all -y
+
+- name: copy modules.conf
+  copy: src=etc/cobbler/modules.conf dest=/etc/cobbler/modules.conf mode=644
+
+#- name: copy cobbler_web.conf
+#  copy: src=etc/httpd/conf.d/cobbler_web.conf dest=/etc/httpd/conf.d/cobbler_web.conf mode=644
+
+#    - name: get hash of user
+#      shell: echo -n "{{ item.user_name }}:Cobbler:" && echo -n "{{ item.user_name }}:Cobbler:{{ item.password }}" | md5sum | awk '{print $1}'
+#      with_items: "{{ cobbler_web_user_pwd | default([]) }}"
+#      register: cobbler_web_user_pwd_hash
+#
+#    - name: template /etc/cobbler/users.digest
+#      template: src=etc/cobbler/users.digest.j2 dest=/etc/cobbler/users.digest mode=644
+
+- name: generate crypted password
+  shell: openssl passwd -1 {{ cobbler_default_password }}
+  register: cobbler_default_password_crypted
+
+- name: template settings.j2
+  template: src=etc/cobbler/settings.j2 dest=/etc/cobbler/settings
+
+- name: template dnsmasq.template.j2
+  template: src=etc/cobbler/dnsmasq.template.j2 dest=/etc/cobbler/dnsmasq.template
+
+#- name: change 'disable' to 'no' in /etc/xinetd.d/tftp
+#  lineinfile: dest=/etc/xinetd.d/tftp regexp="disable" line="disable = no"
+
+#----------------
+# begin add snippets and kickstarts
+#----------------
+#    - name: add_public_key_for_root snippnet
+#      template: src=var/lib/cobbler/snippets/add_public_key_for_root.j2
+#                dest=/var/lib/cobbler/snippets/add_public_key_for_root
+#      when: cobbler_root_public_keys is defined
+#
+#    - name: post_install_network_config_ignore_interface snippnet
+#      template: src=var/lib/cobbler/snippets/post_install_network_config_ignore_interface.j2
+#                dest=/var/lib/cobbler/snippets/post_install_network_config_ignore_interface
+
+- name: template rhel-7-kickstart
+  copy:
+    src: var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+    dest: /var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+
+#- name: start cobbler services
+#  shell: /usr/sbin/apachectl; /usr/bin/cobblerd
+#
+#- name: cobbler get-loaders
+#  shell: cobbler get-loaders
+
+#---------------
+# import distros
+#---------------
+
+#- name: import distro to cobbler
+#  shell: cobbler import --name={{ cobbler_distro.distro_name }}
+#         --arch={{ cobbler_distro.arch }}
+#         --path=/mnt/
+#         --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+#  when: cobbler_distro is defined
+#  ignore_errors: true
+#
+#- name: cobbler sync
+#  shell: cobbler sync
