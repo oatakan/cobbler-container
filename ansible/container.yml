@@ -5,6 +5,7 @@ services:
     environment:
       - APACHE_SSL=1
       - SERVER_IP=192.168.1.126
+      - DISTRO_NAME=RHEL-7.3-x86_64
       - ROOT_PASSWORD=password
     entrypoint: ['/usr/bin/entrypoint.sh']
     working_dir: /

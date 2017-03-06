@@ -26,13 +26,15 @@ cobbler get-loaders
 cobbler signature update
 
 ## import distro
-cobbler import --name="RHEL-7.3-x86_64" \
+if [ -n "${DISTRO_NAME}" ]; then
+  cobbler import --name="${DISTRO_NAME}" \
          --arch="x86_64" \
          --path=/mnt \
-         --kickstart=/var/lib/cobbler/kickstarts/rhel-7-kickstart.ks
+         --kickstart=/var/lib/cobbler/kickstarts/centos7-customized.ks
 
-cobbler profile edit --name=RHEL-7.3-x86_64 \
-         --kopts="kernel_options : ksdevice lang=  inst.repo=http://$SERVER_IP/cblr/ks_mirror/RHEL-7.3-x86_64 ip=dhcp text kssendmac"
+  cobbler profile edit --name=${DISTRO_NAME} \
+         --kopts="kernel_options : ksdevice lang=  inst.repo=http://$SERVER_IP/cblr/ks_mirror/${DISTRO_NAME} ip=dhcp text kssendmac"
+fi
 
 ## add post script to restart dnsmasq since we don't use systemd inside the container
 echo -e '#!/bin/bash\npkill dnsmasq; /usr/sbin/dnsmasq' >  /var/lib/cobbler/triggers/sync/post/run.sh
