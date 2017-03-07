@@ -77,3 +77,7 @@
 - name: template centos7-customized
   template: src=var/lib/cobbler/kickstarts/centos7-customized.ks.j2
             dest=/var/lib/cobbler/kickstarts/centos7-customized.ks
+
+- name: template centos7-customized-uefi
+  template: src=var/lib/cobbler/kickstarts/centos7-customized-uefi.ks.j2
+            dest=/var/lib/cobbler/kickstarts/centos7-customized-uefi.ks
